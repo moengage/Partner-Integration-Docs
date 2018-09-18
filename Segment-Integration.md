@@ -40,112 +40,119 @@ To enable its full functionality (like Push Notifications, InApp Messaging, Acqu
 
 Along with the segment dependency add the below dependency in your build.gradle file.
 
+```groovy
  compile('com.moengage:moengage-segment-integration:+') {
         transitive = true
     }
+```
+
+#### How to Initialise MoEngage SDK: 
+Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
+
+```java
+// this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
+MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
+            .enableSegmentIntegration()
+  			.build();
+    MoEngage.initialise(moEngage);
+```
+
+#### Install/Update Differentiation
+This is solely required for migration to MoEngage Platform. We need your help to tell the SDK whether the user is a new user for on your app or an existing user who has updated to the latest version.
+
+If the user was already using your application and has just updated to a new version which has MoEngage SDK it is an updated call the below API
+
+```java
+MoEHelper.getInstance(getApplicationContext()).setExistingUser(true);
+```
+
+In case it is a fresh install call the below API
+
+```java
+MoEHelper.getInstance(getApplicationContext()).setExistingUser(false);
+```
+
+**This code should be done in your Application class and should be called only once.**
+
+**If this code is not added Smart Trigger InApp/Push Campaigns on INSTALL event will not work.**
 
 #### How To - Push Notifications:
-1. Manifest permissions: Copy the permissions XML below into the `AndroidManifest.xml` and insert your package name into the name fields where it says [YOUR_PACKAGE_NAME/applicationId].
+##### 1. Adding meta information for push notification.
 
- ```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<permission android:name="[YOUR_PACKAGE_NAME/applicationId].permission.C2D_MESSAGE" android:protectionLevel="signature" />
-<uses-permission android:name="[YOUR_PACKAGE_NAME/applicationId].permission.C2D_MESSAGE" />
-<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<!-- If you want to use our Geo Fencing feature  -->
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
- ```
-2. Declaring Receivers: Add the below components into the `AndroidManifest.xml` and replace `[YOUR_PACKAGE_NAME/applicationId]` with your package name or application id for Push.
+Along with the App Id and the notification small icon large icon and sender id(only if using GCM library) to the builder.
 
-**When using Play Services 7.3**
-
- ```xml
-<!-- MOENGAGE RECEIVER FOR RECEIVING GCM BROADCAST MESSAGES -->
-<receiver
-  android:name="com.moengage.receiver.MoEngagePushReceiver"
-  android:permission="com.google.android.c2dm.permission.SEND" >
-  <intent-filter>
-    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-    <category android:name="[YOUR_PACKAGE_NAME/applicationId]" />
-  </intent-filter>
-</receiver>
+```java
+MoEngage moEngage =
+        new MoEngage.Builder(this, "XXXXXXXXXX")
+			.setSenderId("xxxxxxx")
+            .setNotificationSmallIcon(R.drawable.icon)
+            .setNotificationLargeIcon(R.drawable.ic_launcher)
+            .enableSegmentIntegration()
+            .build();
+    MoEngage.initialise(moEngage);
 ```
-**When using Play Services 7.5 and above**
-```xml
-<receiver
-    android:name="com.google.android.gms.gcm.GcmReceiver"
-    android:exported="true"
-    android:permission="com.google.android.c2dm.permission.SEND" >
-    <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <category android:name="[YOUR_PACKAGE_NAME/applicationId]" />
-    </intent-filter>
-</receiver>
-<service
-    android:name="com.moengage.worker.MoEGCMListenerService"
-    android:exported="false" >
-    <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-    </intent-filter>
-</service>
-<service
-    android:name="com.moengage.receiver.MoEInstanceIDListener"
-    android:exported="false">
-    <intent-filter>
-        <action android:name="com.google.android.gms.iid.InstanceID"/>
-    </intent-filter>
-</service>
+##### 2. Push Token
+
+By default the SDK registers for push token. In case your application already has a mechanism to 
+register for push token disable push token registration by using the opt-out as shown below
+
+```java
+MoEngage moEngage =
+        new MoEngage.Builder(this, "XXXXXXXXXX")
+            .setNotificationSmallIcon(R.drawable.icon)
+            .setNotificationLargeIcon(R.drawable.ic_launcher)
+			.optOutTokenRegistration()
+			.enableSegmentIntegration()
+            .build();
+    MoEngage.initialise(moEngage);
 ```
 
-Add the below components into the `AndroidManifest.xml` for Install Intents
-```xml
-<!-- MOENGAGE RECEIVER FOR RECEIVING INSTALLATION INTENT -->
-<receiver android:name="com.moe.pushlibrary.InstallReceiver" >
-  <intent-filter>
-    <action android:name="com.android.vending.INSTALL_REFERRER" />
-  </intent-filter>
-</receiver>
- ```
+Once you have opted out of push token registration pass the token to MoEngage SDK,
+the application should pass the token to MoEngage SDK from the Registration Service used for getting the push token.
 
-4. Declaring MoEngage Specific Meta Tags: Add the following `meta tags` into the `AndroidManifest.xml`. Description of each meta tag and its value:
-    * `[APP_ID]` : MoEngage App Id which you can find under `AppSettings` on MoEngage [Dashboard](http://app.moengage.com/v3/#/settings/0)
-    * `[SENDER_ID]` : The Google Project Number as seen on Google Developer console. This is required for GCM registration.
-    * `[NOTIFICATION_ICON]`: The Small Notification icon which needs to be shown. The value must be just the image file name.
-    * `[NOTIFICATION_LARGE_ICON]`: The large notification icon which will be used for notifications on Lollipop and above. The value must be just the image file name.
-    * `[NOTIFICATION_TYPE]`: Whether its multiple or single. By default it is single but specified `@integer/notification_type_multiple` it will be able to show multiple notifications as one go.
-    * `[NOTIFICATION_TONE]`: The Notification Tone which will be used to play when the notification is shown. By Default it is picked up from system settings but setting the sound file name will play that sound. Remember the value has to be just the sound file name.
-    
- ```xml
-<!-- MANDATORY FIELD: APP ID AS SEEN ON MOENGAGE DASHBOARD APP SETTINGS PAGE -->
-<meta-data
-    android:name="APP_ID"
-    android:value="[MOENGAGE_APP_ID]" />
-<!-- MANDATORY FIELD: SENDER ID , i.e. THE PROJECT NUMBER AS MENTIONED ON GOOGLE CLOUD CONSOLE PROJECTS PAGE -->
-<meta-data
-    android:name="SENDER_ID"
-    android:value="id:[SENDER_ID]" />
-<!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
-<meta-data
-    android:name="NOTIFICATION_ICON"
-    android:value="ic_launcher" />
-<!-- MANDATORY FIELD: THE NOTIFICATION LARGE ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
-<meta-data
-   android:name="NOTIFICATION_LARGE_ICON"
-   android:value="large_icon" />
-<!-- OPTIONAL FIELD: THE NOTIFICATION TYPE WHICH WILL BE USED, SINGLE OR MULTIPLE. DEFAULT BEHAVIOR IS SINGLE -->
-<meta-data
-    android:name="NOTIFICATION_TYPE"
-    android:value="@integer/notification_type_multiple" />
-<!-- OPTIONAL FIELD: THE NOTIFICATION TONE THAT WILL BE USED. IF NOT SET WILL PLAY THE DEFAULT SOUND -->
-<meta-data
-    android:name="NOTIFICATION_TONE"
-    android:value="tring" />
- ```
+```java
+PushManager.getInstance().refreshToken(getApplicationContext(), token);
+```
+
+In case you are allowing MoEngage SDK to register for push but also want the token for 
+internal usage you can get the token by implementing `PushManager.OnTokenReceivedListener` in your **Application class**
+
+```java
+public class DemoApp extends Application implements PushManager.OnTokenReceivedListener{
+  public void onCreate() {
+    PushManager.getInstance().setTokenObserver(this);
+  }
+  @Override public void onTokenReceived(String token) {
+		//save token for your use
+	}
+}
+```
+##### Configure FCM or GCM
+
+Based on whether you are using FCM or GCM move to library specific configuration.
+
+1. [Configuring FCM](https://docs.moengage.com/docs/configuring-fcm)
+2. [Configuring GCM](https://docs.moengage.com/docs/configuring-gcm)
+
+##### Configure Geo-fence
+
+By default SDK does not track location neither geo-fence campaigns work by default.
+To track location and run geo-fence campaigns you need to opt-in for location service in the MoEngage initialiser.
+To initialise call the below opt-in API.
+
+```java
+    MoEngage moEngage =
+        new MoEngage.Builder(this, "XXXXXXXXXXX")
+            .enableLocationServices()
+            .enableSegmentIntegration()
+            .build();
+    MoEngage.initialise(moEngage);
+```
+
+**Note:** For Geo-fence pushes to work your Application should have location permission and Play Services' Location Library should be included.
+
+For more details on refer to the [Configuring Geo-Fence](https://docs.moengage.com/docs/geo-fence-push) section in the MoEngage documentation.
+
 5. Declaring & configuring Rich Landing Activity: Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of the parent activity; `[ACTIVITY_NAME]` with the activity name which should be the parent of the Rich Landing Page
 
  ```xml
@@ -159,24 +166,6 @@ Add the below components into the `AndroidManifest.xml` for Install Intents
         android:value="[PARENT_ACTIVITY_AME]" />
  </activity>
  ```
- 
- 
-#### Install/Update Differentiation
-We need your help to tell the SDK whether the user is a new user or an existing user.
-You can check for an existing SharedPreferences value and confirm whether its a fresh user or an existing user.
-
-```java
-SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-if( pref.contains("your_key")){
-    helper.setExistingUser(true);
-}else{
-    helper.setExistingUser(false);
-}
-```
-In the above code "your_key" is something you expect in the shared preference file if the app has been run at least once before. Possible values might be (firstRun, AppVersion, SenderId, Push Token, etc)
-
-This code should be done in your Application class  and should be called only once
-If this code is not added INSTALL InApp/Push Campaigns will not work
 
 Now log on to [MoEngage Dashboard](http://app.moengage.com/login) and go to `Push Platform Settings` section. Add the GCM API Key which you have generated from the Google Developer console API Access for GCM Module. Also update the app package name.
 
@@ -188,7 +177,10 @@ You are now all setup to receive push notifications from MoEngage. For more info
  
  * [Notification Center](http://docs.moengage.com/docs/notification-center)
  
- * [Geofence based Push Notifications](http://docs.moengage.com/docs/configuring-geofence-pushes)
+ * [Advanced Configuration](https://docs.moengage.com/docs/advanced-integration)
+ 
+ * [API Reference](https://moengage.github.io/MoEngage-Android-SDK/)
+ 
 
 #### Identify
 Use [Identify](https://segment.com/docs/sources/mobile/android/#identify) to track user specific attributes. It equivalent to tracking [user attributes](http://docs.moengage.com/docs/identifying-user) on MoEngage. MoEngage supports traits supported by Segment as well as custom traits. If you set traits.id, we set that as the Unique ID for that user.
