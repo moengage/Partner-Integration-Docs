@@ -329,5 +329,3 @@ Please refer to [this](http://docs.moengage.com/docs/migrating-to-7xxx) link to 
 
 Refer to [this](https://github.com/moengage/SegmentDemo) github repository for sample implementation
 
-## APP_ID
-You can find the APP_ID key under `App Settings` on the MoEngage [dashboard](http://app.moengage.com/v3/#/settings/0)
