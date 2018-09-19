@@ -320,3 +320,85 @@ Please refer to [this](http://docs.moengage.com/docs/migrating-to-7xxx) link to 
 
 Refer to [this](https://github.com/moengage/SegmentDemo) github repository for sample implementation
 
+## Web 
+
+MoEngage WebSDK offers the capability to send push notifications to Google Chrome, Opera and Firefox browsers. There are some additional steps apart from integrating Segment's `analytics.js`.
+
+
+### Integration
+
+#### 1. Setup your MoEngage Web SDK settings at MoEngage Dashboard
+Please setup the [web settings page](https://app.moengage.com/v3/#/settings/push/web) on the MoEngage dashboard in order to start using MoEngage <> Segment integration. 
+
+If you have selected `HTTPS` mode of integration in the settings, there are some additional steps to be taken
+
+#### 1.a Download the required files (HTTPS only)
+For HTTPS Web Push to work, you need to host two files in the `root` directory of your web server. These two files will be available for you to download at the [web settings page](https://app.moengage.com/v3/#/settings/push/web).
+* manifest.json
+* serviceworker.js
+
+NOTE: Please make sure the name of the serviceworker file is exactly `serviceworker.js`. Please contact MoEngage support at support@moengage.com if you wish to have some other name for the serviceworker file.
+
+#### 1.b Add link to manifest in HTML (HTTPS only)
+Add the following line in the <head> tag of your page.
+
+```
+<head>
+  ...
+	<link rel="manifest" href="/manifest.json">
+  ...
+</head>
+```
+
+#### 1.c Use your existing manifest or serviceworker file (HTTPS only)
+If you already have these files,
+
+1. Manifest
+
+Just add the sender ID you saved on MoEngage dashboard. If you've used `MoEngage Shared Project` while setting up, your sender id is `540868316921`.
+
+Please edit your `manifest.json` as follows:
+```
+{
+  ...
+  "gcm_sender_id": "GCM_SENDER_ID",
+  ...
+}
+```
+2. Service Worker
+
+Just add the following line to the top of your `serviceworker.js` file
+```
+importScripts("//cdn.moengage.com/webpush/releases/serviceworker_cdn.min.latest.js?date="+
+new Date().getUTCFullYear()+""+new Date().getUTCMonth()+""+new Date().getUTCDate());
+```
+
+#### 2. Update your settings on Segment dashboard
+1. Copy the `APP_ID` from the [app settings page](https://app.moengage.com/v3/#/settings/app/general) on MoEngage dashboard.
+2. Paste the `APP_ID` obtained in previous step in Segment dashboard.
+![Segment Web SDK Settings](https://raw.githubusercontent.com/panda-moe/public/master/screenshot-app.segment.com-2018.09.20-02-34-34.png)
+3. Make sure the `Connection Mode` is set to `Device Mode`. This is required in order to make use of push notification feature of MoEngage Web SDK.
+
+#### 3. Enable MoEngage
+Make sure MoEngage is enabled on Segment Dashboard.
+
+### Identify
+Use [Identify](https://segment.com/docs/sources/website/analytics.js/#identify) to track user specific attributes. It equivalent to [tracking user attributes](https://docs.moengage.com/docs/tracking-web-user-attributes) on MoEngage. MoEngage supports traits supported by Segment as well as custom traits.
+
+### Track
+Use [track](https://segment.com/docs/sources/website/analytics.js/#track) to track events and user behaviour in your app. This will send the event to MoEngage with the associated properties. Tracking events is essential and will help you create segments for engaging users.
+
+### Reset
+If your website supports the ability for a user to logout and login with a new identity, then you’ll need to call [reset](https://segment.com/docs/sources/website/analytics.js/#reset-logout) method in `analytics.js`.
+
+### Optional
+There are some further optional features you can read about here:
+* [Configure opt in type](https://docs.moengage.com/docs/configuring-notification-opt-in)
+* [Self-handled opt-ins](https://docs.moengage.com/docs/self-handled-opt-ins)
+* [SDK callbacks](https://docs.moengage.com/docs/tracking-opt-ins-on-your-own)
+
+### Test Mode and Debugging
+While updating the MoEngage settings on the Segment Dashboard, you can enable the logging functionality of the MoEngage SDK to see the SDK logs on the browser console. Just set `Enable Debug Logging` to `On` and the SDK will be loaded in debug mode.
+
+NOTE: When debug mode is enabled, the events and attributes of the users are sent to the `TEST` environment of your MoEngage App.
+
