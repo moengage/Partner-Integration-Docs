@@ -130,7 +130,7 @@ Along with tracking your user's activities, MoEngage iOS SDK also provides addit
 #### Push Notifications:
 Push Notifications are a great way to keep your users engaged and informed about your app. You have following options while implementing push notifications in your app:
 
-##### Segment Push Implementation:
+**Segment Push Implementation:**
 
 1.Follow the directions to register for push using Segment SDK in this [link](https://segment.com/docs/libraries/ios/#how-do-i-use-push-notifications-).
 
@@ -146,7 +146,7 @@ Push Notifications are a great way to keep your users engaged and informed about
 
  ```[[SEGAnalytics sharedAnalytics] handleActionWithIdentifier:identifier forRemoteNotification:userInfo];```
  
-##### MoEngage Push Implementation:
+**MoEngage Push Implementation:**
  Follow this link to implement Push Notification in your mobile app using MoEngage SDK : 
  [**Push Notifications**](https://docs.moengage.com/docs/push-notifications)
 
