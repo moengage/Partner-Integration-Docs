@@ -5,30 +5,159 @@ Segment-MoEngage Integration is a bundled integration, requires client side inte
 Follow the below steps for integration
 
 ## iOS
-To get started with MoEngage on iOS, first integrate your app with the MoEngage [iOS](https://segment.com/docs/sources/mobile/ios/) library. To get the APP ID, [login](http://app.moengage.com/login) to your account, click on `Settings` in the left menu and select `App Settings`, here we show the APP ID of your app. Next, go to `Push Settings`, and select `iOS Settings` tab, upload the pem file for Push Notifications here and enter the password for the same. If you don't have the pem already, follow the steps listed [here](http://docs.moengage.com/docs/apns-certificate-pem-file). Finally, you want to ensure you have configured your app delegate to [enable push notifications](https://segment.com/docs/libraries/ios#how-do-i-use-push-notifications-).
 
-For more information on features provided in MoEngage iOS SDK refer to following links:
 
- * [Push Notifications](http://docs.moengage.com/docs/push-notifications)
+To get started with MoEngage on iOS, first integrate your app with the [MoEngage-Segment iOS SDK](https://github.com/moengage/MoEngage-Segment-iOS) library. MoEngage can be integrated via Segment using [CocoaPods](http://cocoapods.org). 
+
+  * Initialise pod with pod init command, this will create a podfile for your project.
+  * Update your podfile by adding pod '**Segment-MoEngage**' as shown below:
+
+  ```ruby
+  use_frameworks!
+  pod 'Segment-MoEngage’
+
+  #The following code will only be required for Swift project
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if target.name == “MoEngage-iOS-SDK"
+          config.build_settings["OTHER_LDFLAGS"] = '$(inherited) "-ObjC"'
+        end
+      end
+    end
+  end
+  ```
+
+   * Update the pod. 
+   
+    pod update
+
+### Setup Segment SDK:
+
+Now head to the the App Delegate, and setup the Segment SDK :
+
+#### Objective-C:
+
+ ```
+ #import <SEGMoEngageIntegrationFactory.h> // This line is key for MoEngage integration
+ #import <SEGAnalytics.h>
+
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // Add your configuration key from Segment
+    SEGAnalyticsConfiguration *config = [SEGAnalyticsConfiguration configurationWithWriteKey:@"configuration key"];
+    
+    // Add MoEngageIntegrationFactory. Without this data will not come to MoEngage.
+    [config use:[SEGMoEngageIntegrationFactory instance]];
+    [SEGAnalytics setupWithConfiguration:config];
+  }
+  ```
  
- * [iOS 10 Rich Notification](http://docs.moengage.com/docs/ios-10-rich-notifications)
  
- * [In-App messaging](http://docs.moengage.com/docs/in-app-nativ)
+#### Swift:
+
+ ```
+ import Segment_MoEngage
+ ...
+ func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey:  Any]?) -> Bool {
+ ...
+	 // Add your configuration key from Segment
+	 let config = SEGAnalyticsConfiguration(writeKey:"configuration key")
+  
+	 // Add MoEngageIntegrationFactory. Without this data will not come to MoEngage.
+	 config.use(SEGMoEngageIntegrationFactory.instance())
+	 SEGAnalytics.setup(with: config)
+ ...
+ }
+ ```
+
+### Setup MoEngage in Segment Dashboard:
+
+To setup MoEngage do the following : 
+  1. First get your key([AppID](http://app.moengage.com/v3/#/settings/0/0)) from MoEngage dashboard. 
+  2. Go to **Segment dashboard**, go to **Integrations** and select **MoEngage**. 
+  3. Enable MoEngage Integration.
+  4. Go to MoEngage Settings and enter the MoEngage AppID, obtained in **Step1**.
+  5. Save the changes.
+  
+  ![Segment Dashboard Settings](https://user-images.githubusercontent.com/15011722/31998605-085158de-b9ae-11e7-9729-c637b6bbc083.png)
+  
+These new settings will take up to an hour to propogate to all of your existing users. For new users it’ll be instanteneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
+
+### Tracking User Attribute
+
+User attributes are specific traits of a user, like email, username, mobile, gender etc. **identify** lets you tie a user to their actions and record traits about them. It includes a unique User ID and any optional traits you know about them.
+
+ ```[[SEGAnalytics sharedAnalytics] identify:@"a user's id" traits:@{ @"email": @"a user's email address" }];```
+
+For more info refer to this [link](https://segment.com/docs/sources/mobile/ios/#identify).
+
+### Tracking Events
+
+Event tracking is used to track user behaviour in an app. **track** lets you record the actions your users perform. Every action triggers i.e,“event”, which can also have associated attributes.
+
+ ```[[SEGAnalytics sharedAnalytics] track:@"Item Purchased" properties:@{ @"item": @"Sword of Heracles"}];```
+
+That's all you need for tracking data. For more info refer this [link](https://segment.com/docs/sources/mobile/ios/#track).
+
+### Reset Users
+
+The *reset* method clears the SDK’s internal stores for the current user. This is useful for apps where users can log in and out with different identities over time.
+
+ ```[[SEGAnalytics sharedAnalytics] reset];```
+
+For more info refer to this [link](https://segment.com/docs/sources/mobile/ios/#reset).
+
+### Install / Update Differentiation 
+
+Since you might integrate us when your app is already on the App Store, we would need to know whether your app update would be an actual UPDATE or an INSTALL.
+To differentiate between those, use one of the method below:
+
+ ```
+ //For new Install call following
+ [[MoEngage sharedInstance]appStatus:INSTALL];
+
+ //For an app update call following
+ [[MoEngage sharedInstance]appStatus:UPDATE];
+ ```
+
+For more info on this refer following [link](https://docs.moengage.com/docs/installupdate-differentiation).
+
+### Using features provided in MoEngage SDK
+
+Along with tracking your user's activities, MoEngage iOS SDK also provides additional features which can be used for more effective user engagement:
+
+#### Push Notifications:
+Push Notifications are a great way to keep your users engaged and informed about your app. You have following options while implementing push notifications in your app:
+
+##### Segment Push Implementation:
+
+1.Follow the directions to register for push using Segment SDK in this [link](https://segment.com/docs/libraries/ios/#how-do-i-use-push-notifications-).
+
+2.In your application’s application:didReceiveRemoteNotification: method, add the following:
+
+ ```[[SEGAnalytics sharedAnalytics] receivedRemoteNotification:userInfo];```
+
+3.If you integrated the application:didReceiveRemoteNotification:fetchCompletionHandler: in your app, add the following to that method:
  
- * [Notification Center](http://docs.moengage.com/docs/ios-notification-center)
+ ```[[SEGAnalytics sharedAnalytics] receivedRemoteNotification:userInfo];```
+
+4.If you implemented handleActionWithIdentifier:forRemoteNotification:, add the following to that method:
+
+ ```[[SEGAnalytics sharedAnalytics] handleActionWithIdentifier:identifier forRemoteNotification:userInfo];```
  
- * [Geofence based Push Notifications](http://docs.moengage.com/docs/geofences)
+##### MoEngage Push Implementation:
+ Follow this link to implement Push Notification in your mobile app using MoEngage SDK : 
+ [**Push Notifications**](https://docs.moengage.com/docs/push-notifications)
 
 
-#### Identify
-Use [Identify](https://segment.com/docs/libraries/ios/#identify) to track user specific attributes. It equivalent to tracking [user attributes](http://docs.moengage.com/docs/tracking-user-attributes) on MoEngage. MoEngage supports traits supported by Segment as well as custom traits. If you set traits.id, we set that as the Unique ID for that user.
+#### In-App Messaging:
 
-#### Track
-Use [track](https://segment.com/docs/libraries/ios/#track) to track events and user behaviour in your app.
-This will send the event to MoEngage with the associated properties. Tracking events is essential and will help you create segments for engaging users differently.
+In-App Messaging are custom views which you can send to a segment of users to show custom messages or give new offers or take to some specific pages. Follow the link to know more about  inApp Messaging and how to implement it in your application: 
+[**InApp NATIV**](https://docs.moengage.com/docs/in-app-nativ)
 
-#### Reset
-If your app supports the ability for a user to logout and login with a new identity, then you’ll need to call reset in your mobile app. Here we will call MoEngage's resetUser implementation to ensure the user information remains consistent.
+### Segment Docs:
+For more info on using **Segment for iOS** refer to [**Developer Docs**](https://segment.com/docs/sources/mobile/ios/) provided by Segment.
 
 
 ## Android
