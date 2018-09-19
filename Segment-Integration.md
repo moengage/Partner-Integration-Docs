@@ -245,14 +245,14 @@ public class DemoApp extends Application implements PushManager.OnTokenReceivedL
 	}
 }
 ```
-##### Configure FCM or GCM
+##### 3. Configure FCM or GCM
 
 Based on whether you are using FCM or GCM move to library specific configuration.
 
 1. [Configuring FCM](https://docs.moengage.com/docs/configuring-fcm)
 2. [Configuring GCM](https://docs.moengage.com/docs/configuring-gcm)
 
-##### Configure Geo-fence
+##### 4. Configure Geo-fence
 
 By default SDK does not track location neither geo-fence campaigns work by default.
 To track location and run geo-fence campaigns you need to opt-in for location service in the MoEngage initialiser.
@@ -271,7 +271,9 @@ To initialise call the below opt-in API.
 
 For more details on refer to the [Configuring Geo-Fence](https://docs.moengage.com/docs/geo-fence-push) section in the MoEngage documentation.
 
-5. Declaring & configuring Rich Landing Activity: Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of the parent activity; `[ACTIVITY_NAME]` with the activity name which should be the parent of the Rich Landing Page
+##### 5. Declaring & configuring Rich Landing Activity: 
+Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of the parent 
+ activity; `[ACTIVITY_NAME]` with the activity name which should be the parent of the Rich Landing Page
 
  ```xml
  <activity
