@@ -7,7 +7,7 @@ Follow the below steps for integration
 ## iOS
 
 
-To get started with MoEngage on iOS, first integrate your app with the [MoEngage-Segment iOS SDK](https://github.com/moengage/MoEngage-Segment-iOS) library. MoEngage can be integrated via Segment using [CocoaPods](http://cocoapods.org). 
+To get started with MoEngage on iOS, first integrate your app with the [MoEngage-Segment-iOS](https://github.com/moengage/MoEngage-Segment-iOS) library. MoEngage can be integrated via Segment using [CocoaPods](http://cocoapods.org). 
 
   * Initialise pod with pod init command, this will create a podfile for your project.
   * Update your podfile by adding pod '**Segment-MoEngage**' as shown below:
@@ -15,17 +15,6 @@ To get started with MoEngage on iOS, first integrate your app with the [MoEngage
   ```ruby
   use_frameworks!
   pod 'Segment-MoEngage’
-
-  #The following code will only be required for Swift project
-  post_install do |installer|
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        if target.name == “MoEngage-iOS-SDK"
-          config.build_settings["OTHER_LDFLAGS"] = '$(inherited) "-ObjC"'
-        end
-      end
-    end
-  end
   ```
 
    * Update the pod. 
