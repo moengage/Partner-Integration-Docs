@@ -34,7 +34,7 @@ If your app supports the ability for a user to logout and login with a new ident
 ## Android
 To get up and running with MoEngage on Android, there a couple of steps we will walk you through.
 
-To enable its full functionality (like Push Notifications, InApp Messaging, Acquisition Tracking), there are still a couple of steps that you have to take care of in your Android app.
+To enable its full functionality (like Push Notifications, InApp Messaging), there are still a couple of steps that you have to take care of in your Android app.
 
 #### Adding MoEngage Dependency:
 
@@ -53,7 +53,7 @@ Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) o
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
             .enableSegmentIntegration()
-  			.build();
+            .build();
     MoEngage.initialise(moEngage);
 ```
 
@@ -84,7 +84,7 @@ Along with the App Id and the notification small icon large icon and sender id(o
 ```java
 MoEngage moEngage =
         new MoEngage.Builder(this, "XXXXXXXXXX")
-			.setSenderId("xxxxxxx")
+            .setSenderId("xxxxxxx")
             .setNotificationSmallIcon(R.drawable.icon)
             .setNotificationLargeIcon(R.drawable.ic_launcher)
             .enableSegmentIntegration()
@@ -101,8 +101,8 @@ MoEngage moEngage =
         new MoEngage.Builder(this, "XXXXXXXXXX")
             .setNotificationSmallIcon(R.drawable.icon)
             .setNotificationLargeIcon(R.drawable.ic_launcher)
-			.optOutTokenRegistration()
-			.enableSegmentIntegration()
+            .optOutTokenRegistration()
+            .enableSegmentIntegration()
             .build();
     MoEngage.initialise(moEngage);
 ```
