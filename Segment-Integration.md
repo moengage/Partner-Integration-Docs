@@ -4,6 +4,20 @@ Segment-MoEngage Integration is a bundled integration, requires client side inte
 
 Follow the below steps for integration
 
+## Setup MoEngage in Segment Dashboard:
+
+To setup MoEngage do the following : 
+  1. First get your key([AppID](http://app.moengage.com/v3/#/settings/0/0)) from MoEngage dashboard. 
+  2. Go to **Segment dashboard**, go to **Integrations** and select **MoEngage**. 
+  3. Enable MoEngage Integration.
+  4. Go to MoEngage Settings and enter the MoEngage AppID, obtained in **Step1**.
+  5. Save the changes.
+  
+  ![Segment Dashboard Settings](https://user-images.githubusercontent.com/15011722/31998605-085158de-b9ae-11e7-9729-c637b6bbc083.png)
+  
+These new settings will take up to an hour to propogate to all of your existing users. For new users it’ll be instanteneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
+
+
 ## iOS
 
 
@@ -59,19 +73,6 @@ Now head to the the App Delegate, and setup the Segment SDK :
  ...
  }
  ```
-
-### Setup MoEngage in Segment Dashboard:
-
-To setup MoEngage do the following : 
-  1. First get your key([AppID](http://app.moengage.com/v3/#/settings/0/0)) from MoEngage dashboard. 
-  2. Go to **Segment dashboard**, go to **Integrations** and select **MoEngage**. 
-  3. Enable MoEngage Integration.
-  4. Go to MoEngage Settings and enter the MoEngage AppID, obtained in **Step1**.
-  5. Save the changes.
-  
-  ![Segment Dashboard Settings](https://user-images.githubusercontent.com/15011722/31998605-085158de-b9ae-11e7-9729-c637b6bbc083.png)
-  
-These new settings will take up to an hour to propogate to all of your existing users. For new users it’ll be instanteneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
 
 ### Tracking User Attribute
 
