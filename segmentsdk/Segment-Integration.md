@@ -20,6 +20,7 @@ To setup MoEngage do the following :
 These new settings will take up to an hour to propagate to all of your existing users. For new 
 users it’ll be instantaneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
 
+![Settings](/segmentsdk/segment_settings.png)
 
 ## iOS
 
