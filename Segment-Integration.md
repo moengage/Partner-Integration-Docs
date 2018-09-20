@@ -1,5 +1,7 @@
 # Getting Started
-Once the Segment library is integrated with your app, toggle MoEngage on in your Segment integrations. These new settings will take up to an hour to propogate to all of your existing users. For new users it’ll be instanteneous!
+Once the Segment library is integrated with your app, toggle MoEngage on in your Segment 
+integrations. These new settings will take up to an hour to propagate to all of your existing 
+users. For new users it’ll be instantaneous!
 Segment-MoEngage Integration is a bundled integration, requires client side integration.
 
 Follow the below steps for integration
@@ -12,10 +14,11 @@ To setup MoEngage do the following :
   3. Enable MoEngage Integration.
   4. Go to MoEngage Settings and enter the MoEngage AppID, obtained in **Step1**.
   5. Save the changes.
+  6. Make sure the `Connection Mode` is set to `Device Mode`. This is required in order to make use
+      of features like push notification and in-app feature of MoEngage SDK.
   
-  ![Segment Dashboard Settings](https://user-images.githubusercontent.com/15011722/31998605-085158de-b9ae-11e7-9729-c637b6bbc083.png)
-  
-These new settings will take up to an hour to propogate to all of your existing users. For new users it’ll be instanteneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
+These new settings will take up to an hour to propagate to all of your existing users. For new 
+users it’ll be instantaneous! Segment-MoEngage Integration is a bundled integration, requires client side integration.
 
 
 ## iOS
@@ -373,15 +376,6 @@ Just add the following line to the top of your `serviceworker.js` file
 importScripts("//cdn.moengage.com/webpush/releases/serviceworker_cdn.min.latest.js?date="+
 new Date().getUTCFullYear()+""+new Date().getUTCMonth()+""+new Date().getUTCDate());
 ```
-
-#### 2. Update your settings on Segment dashboard
-1. Copy the `APP_ID` from the [app settings page](https://app.moengage.com/v3/#/settings/app/general) on MoEngage dashboard.
-2. Paste the `APP_ID` obtained in previous step in Segment dashboard.
-![Segment Web SDK Settings](https://raw.githubusercontent.com/panda-moe/public/master/screenshot-app.segment.com-2018.09.20-02-34-34.png)
-3. Make sure the `Connection Mode` is set to `Device Mode`. This is required in order to make use of push notification feature of MoEngage Web SDK.
-
-#### 3. Enable MoEngage
-Make sure MoEngage is enabled on Segment Dashboard.
 
 ### Identify
 Use [Identify](https://segment.com/docs/sources/website/analytics.js/#identify) to track user specific attributes. It equivalent to [tracking user attributes](https://docs.moengage.com/docs/tracking-web-user-attributes) on MoEngage. MoEngage supports traits supported by Segment as well as custom traits.
