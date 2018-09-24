@@ -306,6 +306,8 @@ You are now all setup to receive push notifications from MoEngage. For more info
  
  * [API Reference](https://moengage.github.io/MoEngage-Android-SDK/)
  
+ * [GDPR Compliance](https://docs.moengage.com/docs/gdpr-compliance)
+ 
 
 #### Identify
 Use [Identify](https://segment.com/docs/sources/mobile/android/#identify) to track user specific attributes. It equivalent to tracking [user attributes](http://docs.moengage.com/docs/identifying-user) on MoEngage. MoEngage supports traits supported by Segment as well as custom traits. If you set traits.id, we set that as the Unique ID for that user.
