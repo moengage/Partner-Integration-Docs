@@ -150,6 +150,10 @@ Push Notifications are a great way to keep your users engaged and informed about
 In-App Messaging are custom views which you can send to a segment of users to show custom messages or give new offers or take to some specific pages. Follow the link to know more about  inApp Messaging and how to implement it in your application: 
 [**InApp NATIV**](https://docs.moengage.com/docs/in-app-nativ)
 
+
+#### GDPR Compliance:
+MoEngage SDK is GDPR compliant, follow the doc in this [link](https://docs.moengage.com/docs/gdpr-compliance-1) to know how to use opt-outs for different features. 
+
 ### Segment Docs:
 For more info on using **Segment for iOS** refer to [**Developer Docs**](https://segment.com/docs/sources/mobile/ios/) provided by Segment.
 
