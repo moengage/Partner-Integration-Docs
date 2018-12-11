@@ -177,6 +177,10 @@ Along with the segment dependency add the below dependency in your build.gradle 
 Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
 
 ```java
+Analytics analytics = new Analytics.Builder(getApplicationContext(),"writeKey")//use your own write key
+            .logLevel(Analytics.LogLevel.VERBOSE)// should be added only in debug builds. Make sure this is removed before a signed apk is generated.
+            .use(MoEngageIntegration.FACTORY)//enable MoEngage integration
+            .build();
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
             .enableSegmentIntegration()
