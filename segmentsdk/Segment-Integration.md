@@ -117,6 +117,17 @@ To differentiate between those, use one of the method below:
 
 For more info on this refer following [link](https://docs.moengage.com/docs/installupdate-differentiation).
 
+### Data Redirection
+
+We support data redirection to our EU servers in our SDK. This can be done by calling `redirectDataToRegion:` method to redirect the data to `MOE_REGION_EU` region defined in DataRedirectionRegion Enumerator. Use the method as shown below:
+
+```
+ [MoEngage redirectDataToRegion:MOE_REGION_EU];
+```
+
+**IMPORTANT** :
+To sign up to our EU environment go to the following [URL](https://app-eu.moengage.com).
+
 ### Using features provided in MoEngage SDK
 
 Along with tracking your user's activities, MoEngage iOS SDK also provides additional features which can be used for more effective user engagement:
