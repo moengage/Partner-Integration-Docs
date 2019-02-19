@@ -311,7 +311,34 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
  </activity>
  ```
 
-Now log on to [MoEngage Dashboard](http://app.moengage.com/login) and go to `Push Platform Settings` section. Add the GCM API Key which you have generated from the Google Developer console API Access for GCM Module. Also update the app package name.
+##### 6. Data Redirection
+In case your app wants to re-direct data to a specific zone because of any data regulation policy
+ please configure the zone in the MoEngage initialiser object as shown below.
+
+```java
+    MoEngage moEngage = 
+        new MoEngage.Builder(this, "XXXXXXXXXXX")
+            .redirectDataToRegion()// add the required region here.
+            .build();
+    MoEngage.initialise(moEngage);
+
+```
+
+Supported Regions
+
+```java
+    REGION_INDIA, 
+    REGION_EU
+```
+Refer to the API [documentation](https://moengage.github.io/MoEngage-Android-SDK/com/moengage/core/MoEngage.DATA_REGION.html) for more details.
+
+**Note:** If you are redirecting your data to the European Region please sign-up using the 
+following [URL](https://app-eu.moengage.com).
+
+
+Now log on to [MoEngage Dashboard Settings](https://app.moengage.com/v3/#/settings/push/mobile) 
+and add the `Server Key` from the Firbase Console. Also update the app package name. If you are 
+not sure where to find the server key refer to this [documentation](https://docs.moengage.com/docs/getting-fcmgcm-server-key).
 
 You are now all setup to receive push notifications from MoEngage. For more information on features provided in MoEngage Android SDK refer to following links: 
 
