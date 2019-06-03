@@ -150,33 +150,30 @@ For more info on using **Segment for iOS** refer to [**Developer Docs**](https:/
 
 
 ## Android
-To get up and running with MoEngage on Android, there a couple of steps we will walk you through.
 
-To enable its full functionality (like Push Notifications, InApp Messaging), there are still a couple of steps that you have to take care of in your Android app.
+To get up and running with MoEngage on Android, there a couple of steps we will walk you through 
+to enable its full functionality (like Push Notifications, InApp Messaging), there are still a couple of steps that you have to take care of in your Android app.
 
 #### Adding MoEngage Dependency:
 
 Along with the segment dependency add the below dependency in your build.gradle file.
 
 ```groovy
- compile('com.moengage:moengage-segment-integration:+') {
+ implementation('com.moengage:moengage-segment-integration:+') {
         transitive = true
     }
 ```
 
-#### How to Initialise MoEngage SDK: 
+#### How to Initialise MoEngage SDK:
+ 
 Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
 
 ```java
-Analytics analytics = new Analytics.Builder(getApplicationContext(),"writeKey")//use your own write key
-            .logLevel(Analytics.LogLevel.VERBOSE)// should be added only in debug builds. Make sure this is removed before a signed apk is generated.
-            .use(MoEngageIntegration.FACTORY)//enable MoEngage integration
-            .build();
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
             .enableSegmentIntegration()
             .build();
-    MoEngage.initialise(moEngage);
+MoEngage.initialise(moEngage);
 ```
 
 #### Install/Update Differentiation
@@ -194,24 +191,23 @@ In case it is a fresh install call the below API
 MoEHelper.getInstance(getApplicationContext()).setExistingUser(false);
 ```
 
-**This code should be done in your Application class and should be called only once.**
+**This code should be done in your Application class's `onCreate()` and should be called only once.**
 
 **If this code is not added Smart Trigger InApp/Push Campaigns on INSTALL event will not work.**
 
 #### How To - Push Notifications:
 ##### 1. Adding meta information for push notification.
 
-Along with the App Id and the notification small icon large icon and sender id(only if using GCM library) to the builder.
+Along with the App Id and the notification small icon and large icon to the builder.
 
 ```java
 MoEngage moEngage =
         new MoEngage.Builder(this, "XXXXXXXXXX")
-            .setSenderId("xxxxxxx")
             .setNotificationSmallIcon(R.drawable.icon)
             .setNotificationLargeIcon(R.drawable.ic_launcher)
             .enableSegmentIntegration()
             .build();
-    MoEngage.initialise(moEngage);
+MoEngage.initialise(moEngage);
 ```
 ##### 2. Push Token
 
@@ -226,7 +222,18 @@ MoEngage moEngage =
             .optOutTokenRegistration()
             .enableSegmentIntegration()
             .build();
-    MoEngage.initialise(moEngage);
+MoEngage.initialise(moEngage);
+```
+
+```java
+MoEngage moEngage =
+        new MoEngage.Builder(this, "XXXXXXXXXX")
+            .setNotificationSmallIcon(R.drawable.icon)
+            .setNotificationLargeIcon(R.drawable.ic_launcher)
+            .optOutTokenRegistration()
+            .enableSegmentIntegration()
+            .build();
+MoEngage.initialise(moEngage);
 ```
 
 Once you have opted out of push token registration pass the token to MoEngage SDK,
@@ -249,12 +256,12 @@ public class DemoApp extends Application implements PushManager.OnTokenReceivedL
 	}
 }
 ```
-##### 3. Configure FCM or GCM
+##### 3. Configure FCM
 
-Based on whether you are using FCM or GCM move to library specific configuration.
+Based on whether you are using FCM move to library specific configuration.
 
 1. [Configuring FCM](https://docs.moengage.com/docs/configuring-fcm)
-2. [Configuring GCM](https://docs.moengage.com/docs/configuring-gcm)
+
 
 ##### 4. Configure Geo-fence
 
@@ -291,34 +298,10 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
  </activity>
  ```
 
-##### 6. Data Redirection
-In case your app wants to re-direct data to a specific zone because of any data regulation policy
- please configure the zone in the MoEngage initialiser object as shown below.
+##### 6. Configuring your MoEngage Account
 
-```java
-    MoEngage moEngage = 
-        new MoEngage.Builder(this, "XXXXXXXXXXX")
-            .redirectDataToRegion()// add the required region here.
-            .build();
-    MoEngage.initialise(moEngage);
-
-```
-
-Supported Regions
-
-```java
-    REGION_INDIA, 
-    REGION_EU
-```
-Refer to the API [documentation](https://moengage.github.io/MoEngage-Android-SDK/com/moengage/core/MoEngage.DATA_REGION.html) for more details.
-
-**Note:** If you are redirecting your data to the European Region please sign-up using the 
-following [URL](https://app-eu.moengage.com).
-
-
-Now log on to [MoEngage Dashboard Settings](https://app.moengage.com/v3/#/settings/push/mobile) 
-and add the `Server Key` from the Firbase Console. Also update the app package name. If you are 
-not sure where to find the server key refer to this [documentation](https://docs.moengage.com/docs/getting-fcmgcm-server-key).
+Copy the Sever Key from the FCM console and add it to the MoEngage Dashboard(Not sure where to find the Server Key refer to [Getting FCM Server Key](https://docs.moengage.com/docs/getting-fcmgcm-server-key). To upload it, go to the [Settings Page](http://app.moengage.com/v3/#/settings/4/0) and add the Server Key and package name.
+**Please make sure you add the keys both in Test and Live environment.**
 
 You are now all setup to receive push notifications from MoEngage. For more information on features provided in MoEngage Android SDK refer to following links: 
 
