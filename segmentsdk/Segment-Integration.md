@@ -41,9 +41,7 @@ To get started with MoEngage on iOS, first integrate your app with the [MoEngage
 
 ### Setup Segment SDK:
 
-Now head to the the App Delegate, and setup the Segment SDK :
-
-#### Objective-C:
+Now head to the App Delegate file, and setup the Segment SDK by adding `SEGMoEngageIntegrationFactory` instance to the `SEGAnalyticsConfiguration` as shown below:
 
  ```
  #import <SEGMoEngageIntegrationFactory.h> // This line is key for MoEngage integration
@@ -59,24 +57,6 @@ Now head to the the App Delegate, and setup the Segment SDK :
     [SEGAnalytics setupWithConfiguration:config];
   }
   ```
- 
- 
-#### Swift:
-
- ```
- import Segment_MoEngage
- ...
- func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey:  Any]?) -> Bool {
- ...
-	 // Add your configuration key from Segment
-	 let config = SEGAnalyticsConfiguration(writeKey:"configuration key")
-  
-	 // Add MoEngageIntegrationFactory. Without this data will not come to MoEngage.
-	 config.use(SEGMoEngageIntegrationFactory.instance())
-	 SEGAnalytics.setup(with: config)
- ...
- }
- ```
 
 ### Tracking User Attribute
 
