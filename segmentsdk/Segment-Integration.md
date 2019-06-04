@@ -305,10 +305,10 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
  
  ##### 6. Data Redirection
  In case your app wants to re-direct data to a specific zone because of any data regulation policy
-  please configure the zone in the MoEngage initialiser object as shown below.
- 
+please configure the zone in the MoEngage initialiser object as shown below.
+
  ```java
-     MoEngage moEngage = 
+     MoEngage moEngage =
          new MoEngage.Builder(this, "XXXXXXXXXXX")
              .redirectDataToRegion()// add the required region here.
              .build();
@@ -316,17 +316,15 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
  
  ```
  
- Supported Regions
- 
+Supported Regions
  ```java
-     REGION_INDIA, 
+     REGION_INDIA,
      REGION_EU
  ```
- Refer to the API [documentation](https://moengage.github.io/MoEngage-Android-SDK/com/moengage/core/MoEngage.DATA_REGION.html) for more details.
- 
+Refer to the API [documentation](https://moengage.github.io/MoEngage-Android-SDK/com/moengage/core/MoEngage.DATA_REGION.html) for more details.
+
  **Note:** If you are redirecting your data to the European Region please sign-up using the 
  following [URL](https://app-eu.moengage.com).
- 
 
 
 ##### 7. Configuring your MoEngage Account
