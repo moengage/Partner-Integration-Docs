@@ -169,6 +169,11 @@ Along with the segment dependency add the below dependency in your build.gradle 
 Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
 
 ```java
+Analytics analytics = new Analytics.Builder(getApplicationContext(),"writeKey")//use your own write key
+            .logLevel(Analytics.LogLevel.VERBOSE)// should be added only in debug builds. Make sure this is removed before a signed apk is generated.
+            .use(MoEngageIntegration.FACTORY)//enable MoEngage integration
+            .build();
+
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
             .enableSegmentIntegration()
@@ -297,8 +302,34 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
         android:value="[PARENT_ACTIVITY_AME]" />
  </activity>
  ```
+ 
+ ##### 6. Data Redirection
+ In case your app wants to re-direct data to a specific zone because of any data regulation policy
+  please configure the zone in the MoEngage initialiser object as shown below.
+ 
+ ```java
+     MoEngage moEngage = 
+         new MoEngage.Builder(this, "XXXXXXXXXXX")
+             .redirectDataToRegion()// add the required region here.
+             .build();
+     MoEngage.initialise(moEngage);
+ 
+ ```
+ 
+ Supported Regions
+ 
+ ```java
+     REGION_INDIA, 
+     REGION_EU
+ ```
+ Refer to the API [documentation](https://moengage.github.io/MoEngage-Android-SDK/com/moengage/core/MoEngage.DATA_REGION.html) for more details.
+ 
+ **Note:** If you are redirecting your data to the European Region please sign-up using the 
+ following [URL](https://app-eu.moengage.com).
+ 
 
-##### 6. Configuring your MoEngage Account
+
+##### 7. Configuring your MoEngage Account
 
 Copy the Sever Key from the FCM console and add it to the MoEngage Dashboard(Not sure where to find the Server Key refer to [Getting FCM Server Key](https://docs.moengage.com/docs/getting-fcmgcm-server-key). To upload it, go to the [Settings Page](http://app.moengage.com/v3/#/settings/4/0) and add the Server Key and package name.
 **Please make sure you add the keys both in Test and Live environment.**
