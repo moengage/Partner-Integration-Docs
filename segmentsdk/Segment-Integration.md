@@ -230,17 +230,6 @@ MoEngage moEngage =
 MoEngage.initialise(moEngage);
 ```
 
-```java
-MoEngage moEngage =
-        new MoEngage.Builder(this, "XXXXXXXXXX")
-            .setNotificationSmallIcon(R.drawable.icon)
-            .setNotificationLargeIcon(R.drawable.ic_launcher)
-            .optOutTokenRegistration()
-            .enableSegmentIntegration()
-            .build();
-MoEngage.initialise(moEngage);
-```
-
 Once you have opted out of push token registration pass the token to MoEngage SDK,
 the application should pass the token to MoEngage SDK from the Registration Service used for getting the push token.
 
@@ -263,9 +252,7 @@ public class DemoApp extends Application implements PushManager.OnTokenReceivedL
 ```
 ##### 3. Configure FCM
 
-Based on whether you are using FCM move to library specific configuration.
-
-1. [Configuring FCM](https://docs.moengage.com/docs/configuring-fcm)
+For MoEngage SDK to display push notifications you need to either add MoEngage SDK's listener in your app's manifest or pass the push payload to the SDK. Refer to the [Configuring FCM](https://docs.moengage.com/docs/configuring-fcm) documentation for more details.  
 
 
 ##### 4. Configure Geo-fence
