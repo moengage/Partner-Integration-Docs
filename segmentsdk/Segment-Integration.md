@@ -363,7 +363,7 @@ For HTTPS Web Push to work, you need to host service worker file in the `root` d
 NOTE: Please make sure the name of the serviceworker file is exactly `serviceworker.js`. Please contact MoEngage support at support@moengage.com if you wish to have some other name for the serviceworker file.
 
 #### 2.b Use your serviceworker file (HTTPS only)
-If you already SW file,
+If you already have an SW file,
 
 ```
 1. Service Worker
