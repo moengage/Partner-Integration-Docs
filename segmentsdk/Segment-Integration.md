@@ -245,7 +245,7 @@ The Application would need to pass the Push Token received from FCM to the MoEng
 Use the below API to pass the push token to the MoEngage SDK.
 
 ```java
-PushManager.getInstance().refreshToken(getApplicationContext(), token);
+MoEFireBaseHelper.Companion.getInstance().passPushToken(getApplicationContext(), token);
 ```
 *Note:* Please make sure token is passed to MoEngage SDK whenever push token is refreshed and on application update. Passing token on application update is important for migration to the MoEngage Platform.
 
@@ -255,7 +255,7 @@ Before passing the payload to the MoEngage SDK you should check if the payload i
 
 ```java
 if (MoEPushHelper.getInstance().isFromMoEngagePlatform(remoteMessage.getData())) {
-  MoEPushHelper.getInstance().handlePushPayload(getApplicationContext(),remoteMessage.getData());
+  MoEFireBaseHelper.Companion.getInstance().passPushPayload(getApplicationContext(), remoteMessage.getData());
 }else{
   // your app's business logic to show notification
 }
@@ -272,7 +272,7 @@ Add the below code in your manifest file.
 </service>
 ```
 When MoEngage SDK handles push registration it optionally provides a callback to the application whenever a new token is registered or token is refreshed. 
-Application can get this callback by implementing `PushManager.OnTokenReceivedListener` and registering for a callback in the Application class'  `onCreate()` using `PushManager.getInstance().setTokenObserver()` 
+Application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.Companion.getInstance().setEventListener()` 
 
 
 ##### 4. Configure Geo-fence
@@ -303,10 +303,6 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
     android:name="com.moe.pushlibrary.activities.MoEActivity"
     android:label="[ACTIVITY_NAME]"
     android:parentActivityName="[PARENT_ACTIVITY_AME]" >
-    <!-- Parent activity meta-data to support 4.0 and lower -->
-    <meta-data
-        android:name="android.support.PARENT_ACTIVITY"
-        android:value="[PARENT_ACTIVITY_AME]" />
  </activity>
  ```
 
