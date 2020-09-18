@@ -169,6 +169,34 @@ Along with the segment, dependency add the below dependency in your build.gradle
 ```
 where `$sdkVersion` should be replaced by the latest version of the MoEngage SDK.
 
+MoEngage SDK depends on the below Jetpack libraries provided by Google for its functioning, make you add them if not
+ done already.
+ 
+```groovy
+    implementation("androidx.core:core:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.2.0")
+```
+Refer to the [SDK Configuration](https://docs.moengage.com/docs/android-sdk-configuration) documentation to know more about the build config and other libraries used by the SDK.
+ 
+#### Register MoEngage with Segment SDK:
+
+After adding the dependency, you must register the integration with Segment SDK. To do this, import the MoEngage
+ integration:
+
+```java
+import com.segment.analytics.android.integrations.moengage.MoEngageIntegration;
+```
+
+Add the following line:
+
+```java
+Analytics analytics = new Analytics.Builder(this, "write_key")
+                .use(MoEngageIntegration.FACTORY)
+                .build();
+```
+
+
 #### How to Initialise MoEngage SDK: 
 Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
 
@@ -181,7 +209,8 @@ MoEngage.initialise(moEngage);
 ```
 
 #### Install/Update Differentiation
-This is solely required for migration to the MoEngage Platform. We need your help to tell the SDK whether the user is a new user for on your app or an existing user who has updated to the latest version.
+This is solely required for migration to the MoEngage Platform. We need your help to tell the SDK whether the user is
+ a new user for your application, or an existing user who has updated to the latest version.
 
 If the user was already using your application and has just updated to a new version which has MoEngage SDK it is an updated call the below API
 
@@ -194,10 +223,6 @@ In case it is a fresh install call the below API
 ```java
 MoEHelper.getInstance(getApplicationContext()).setAppStatus(AppStatus.INSTALL);
 ```
-
-**This code should be done in your Application class's `onCreate()` and should be called only once.**
-
-**If this code is not added Smart Trigger InApp/Push Campaigns on INSTALL event will not work.**
 
 #### How To - Push Notifications:
 Copy the Server Key from the FCM console and add it to the MoEngage Dashboard(Not sure where to find the Server Key refer to [Getting FCM Server Key](https://docs.moengage.com/docs/getting-fcmgcm-server-key). To upload it, go to [Settings Page](https://app.moengage.com/v3/#/settings/push/mobile) and add the Server Key and package name.
@@ -302,7 +327,7 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
  <activity
     android:name="com.moe.pushlibrary.activities.MoEActivity"
     android:label="[ACTIVITY_NAME]"
-    android:parentActivityName="[PARENT_ACTIVITY_AME]" >
+    android:parentActivityName="[PARENT_ACTIVITY_NAME]" >
  </activity>
  ```
 
@@ -331,13 +356,9 @@ This will send the event to MoEngage with the associated properties. Tracking ev
 #### Reset
 If your app supports the ability for a user to logout and login with a new identity, then you’ll need to call reset for the Analytics client.
 
-#### Migrating from an older version(One time process)
-Please refer to [this](http://docs.moengage.com/docs/migrating-to-7xxx) link to migrate from SDK version less than 2.0.00
-
-
 #### Sample Implementation
 
-Refer to [this](https://github.com/moengage/SegmentDemo) github repository for sample implementation
+Refer to [this](https://github.com/moengage/moengage-segment-integration) github repository for sample implementation
 
 ## Web 
 
