@@ -198,7 +198,8 @@ Analytics analytics = new Analytics.Builder(this, "write_key")
 
 
 #### How to Initialise MoEngage SDK: 
-Get APP ID from the [Settings Page](http://app.moengage.com/v3/#/settings/0/0) on the MoEngage dashboard and initialise the MoEngage SDK in the `Application` class's `onCreate()`
+Get APP ID from the Settings Page `Dashboard --> Settings --> App --> General` and initialize the MoEngage SDK in the `Application` class's `onCreate()`
+***Note: It is recommended that you initialize the SDK on the main thread inside `onCreate()` and not create a worker thread and initialize the SDK on that thread.*** 
 
 ```java
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
@@ -225,22 +226,26 @@ MoEHelper.getInstance(getApplicationContext()).setAppStatus(AppStatus.INSTALL);
 ```
 
 #### How To - Push Notifications:
-Copy the Server Key from the FCM console and add it to the MoEngage Dashboard(Not sure where to find the Server Key refer to [Getting FCM Server Key](https://docs.moengage.com/docs/getting-fcmgcm-server-key). To upload it, go to [Settings Page](https://app.moengage.com/v3/#/settings/push/mobile) and add the Server Key and package name.
+Copy the Server Key from the FCM console and add it to the MoEngage Dashboard(Not sure where to find the Server Key refer to [Getting FCM Server Key](https://docs.moengage.com/docs/getting-fcmgcm-server-key)). To upload it, go to the Settings Page `Dashboard --> Settings --> Channel --> Push --> Mobile Push --> Android` and add the Server Key and package name.
 **Please make sure you add the keys both in Test and Live environment.**
 
-##### Adding meta information for push notification.
+##### Adding meta information for push notification
 
-Along with the App Id and the notification small icon and large icon to the builder.
+To show push notifications some metadata regarding the notification is required where the small icon and large icon drawables being the mandatory ones.
+Refer to the [NotificationConfig](https://moengage.github.io/android-api-reference/core/core/com.moengage.core.config/-notification-config/index.html) API reference for all the possible options.
+
+Use the `configureNotificationMetaData()` to pass on the configuration to the SDK.
 
 ```java
 MoEngage moEngage =
         new MoEngage.Builder(this, "XXXXXXXXXX")
-            .setNotificationSmallIcon(R.drawable.icon)
-            .setNotificationLargeIcon(R.drawable.ic_launcher)
+            .configureNotificationMetaData(new NotificationConfig(R.drawable.small_icon, R.drawable.large_icon, R.color.notiColor, "sound", true, true, true))
             .enableSegmentIntegration()
             .build();
 MoEngage.initialise(moEngage);
 ```
+
+##### Configuring Firebase Cloud Messaging
 
 For showing Push notifications there are 2 important things 
 
@@ -253,13 +258,12 @@ By default, MoEngage SDK attempts to register for push token, since your applica
 
 ###### How to opt-out of MoEngage Registration?
 
-To opt-out of MoEngage's token registration mechanism call in the `optOutTokenRegistration()` on the `MoEngage.Builder` as shown below
+To opt-out of MoEngage's token registration mechanism disable token registration while configuring FCM in the `MoEngage.Builder` as shown below
 
 ```java
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXX")
-            .setNotificationSmallIcon(R.drawable.icon)
-            .setNotificationLargeIcon(R.drawable.ic_launcher)
-            .optOutTokenRegistration()
+            .configureNotificationMetaData(new NotificationConfig(R.drawable.small_icon, R.drawable.large_icon, R.color.notiColor, "sound", true, true, true))
+            .configureFcm(FcmConfig(false))
             .enableSegmentIntegration()
             .build();
 MoEngage.initialise(moEngage);
@@ -270,7 +274,7 @@ The Application would need to pass the Push Token received from FCM to the MoEng
 Use the below API to pass the push token to the MoEngage SDK.
 
 ```java
-MoEFireBaseHelper.Companion.getInstance().passPushToken(getApplicationContext(), token);
+MoEFireBaseHelper.getInstance().passPushToken(getApplicationContext(), token);
 ```
 *Note:* Please make sure token is passed to MoEngage SDK whenever push token is refreshed and on application update. Passing token on application update is important for migration to the MoEngage Platform.
 
@@ -299,27 +303,10 @@ Add the below code in your manifest file.
 When MoEngage SDK handles push registration it optionally provides a callback to the application whenever a new token is registered or token is refreshed. 
 Application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.Companion.getInstance().setEventListener()` 
 
+When MoEngage SDK handles push registration it optionally provides a callback to the Application whenever a new token is registered or token is refreshed.
+An application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.getInstance().addEventListener()`
 
-##### 4. Configure Geo-fence
-
-By default, SDK does not track location neither geo-fence campaigns work by default.
-To track location and run geo-fence campaigns you need to opt-in for location service in the MoEngage initializer.
-To initialize call the below opt-in API.
-
-```java
-    MoEngage moEngage =
-        new MoEngage.Builder(this, "XXXXXXXXXXX")
-            .enableLocationServices()
-            .enableSegmentIntegration()
-            .build();
-    MoEngage.initialise(moEngage);
-```
-
-**Note:** For Geo-fence pushes to work your Application should have location permission and Play Services' Location Library should be included.
-
-For more details on refer to the [Configuring Geo-Fence](https://docs.moengage.com/docs/push-configuration#section-geofence-push) section in the MoEngage documentation.
-
-##### 5. Declaring & configuring Rich Landing Activity: 
+##### 4. Declaring & configuring Rich Landing Activity: 
 Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of the parent 
  activity; `[ACTIVITY_NAME]` with the activity name which should be the parent of the Rich Landing Page
 
@@ -334,16 +321,18 @@ Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of 
 You are now all set up to receive push notifications from MoEngage. For more information on features provided in MoEngage Android SDK refer to the following links: 
 
  * [Push Notifications](http://docs.moengage.com/docs/push-configuration)
+
+ * [Geofence](https://docs.moengage.com/docs/android-geofence)
  
- * [In-App messaging](http://docs.moengage.com/docs/configuring-in-app-nativ)
+ * [In-App messaging](https://docs.moengage.com/docs/android-in-app-nativ)
  
- * [Notification Center](http://docs.moengage.com/docs/notification-center)
+ * [Notification Center](https://docs.moengage.com/docs/android-notification-center)
  
- * [Advanced Configuration](https://docs.moengage.com/docs/advanced-integration)
+ * [Advanced Configuration](https://docs.moengage.com/docs/android-advanced-integration)
  
- * [API Reference](https://moengage.github.io/MoEngage-Android-SDK/)
+ * [API Reference](https://moengage.github.io/android-api-reference/-modules.html)
  
- * [GDPR Compliance](https://docs.moengage.com/docs/gdpr-compliance)
+ * [Compliance](https://docs.moengage.com/docs/android-compliance)
  
 
 #### Identify
