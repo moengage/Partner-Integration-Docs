@@ -353,50 +353,22 @@ MoEngage WebSDK offers the capability to send push notifications to Google Chrom
 ### Integration
 
 #### 1. Setup your MoEngage Web SDK settings at MoEngage Dashboard
-Please setup the [web settings](https://app.moengage.com/v3/#/settings/push/web) on the MoEngage dashboard in order to start using MoEngage <> Segment integration. 
+Please setup the web settings (`Dashboard Settings` -> `Push` -> `Web Push`) on the MoEngage dashboard in order to start using MoEngage <> Segment integration. 
 
 If you have selected `HTTPS` mode of integration in the settings, there are some additional steps to be taken
 
 #### 2 Set up for HTTPS websites
-#### 2.a Download the required files (HTTPS only)
-For HTTPS Web Push to work, you need to host two files in the `root` directory of your web server. These two files will be available for you to download at the [web settings page](https://app.moengage.com/v3/#/settings/push/web).
-* manifest.json
+#### 2.a Download the serviceworker file (HTTPS only)
+For HTTPS Web Push to work, you need to host the serviceworker file in the `root` directory of your web server. It will be available for you to download at the web settings page (`Dashboard Settings` -> `Push` -> `Web Push`)
 * serviceworker.js
 
 NOTE: Please make sure the name of the serviceworker file is exactly `serviceworker.js`. Please contact MoEngage support at support@moengage.com if you wish to have some other name for the serviceworker file.
 
-#### 2.b Add link to manifest in HTML (HTTPS only)
-Add the following line in the <head> tag of your page.
-
-```
-<head>
-  ...
-	<link rel="manifest" href="/manifest.json">
-  ...
-</head>
-```
-
-#### 2.c Use your existing manifest or serviceworker file (HTTPS only)
-If you already have these files,
-
-1. Manifest
-
-Add the sender ID you saved on MoEngage dashboard as the `gcm_sender_id`. If you've used `MoEngage Shared Project` while setting up, your sender id is `540868316921`.
-
-Please edit your `manifest.json` as follows:
-```
-{
-  ...
-  "gcm_sender_id": "GCM_SENDER_ID",
-  ...
-}
-```
-2. Service Worker
+#### 2.b Use your existing serviceworker file (HTTPS)
 
 Just add the following line to the top of your `serviceworker.js` file
 ```
-importScripts("//cdn.moengage.com/webpush/releases/serviceworker_cdn.min.latest.js?date="+
-new Date().getUTCFullYear()+""+new Date().getUTCMonth()+""+new Date().getUTCDate());
+importScripts("//cdn.moengage.com/webpush/releases/serviceworker_cdn.min.latest.js");
 ```
 
 ### Identify
