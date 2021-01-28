@@ -9,7 +9,7 @@ Follow the below steps for integration
 ## Setup MoEngage in Segment Dashboard:
 
 To setup MoEngage do the following : 
-  1. First get your key([AppID](http://app.moengage.com/v3/#/settings/0/0)) from MoEngage dashboard. 
+  1. Get APP ID from the Settings Page `Dashboard --> Settings --> App --> General` of the MoEngage dashboard. 
   2. Go to **Segment dashboard**, go to **Integrations** and select **MoEngage**. 
   3. Enable MoEngage Integration.
   4. Go to MoEngage Settings and enter the MoEngage AppID, obtained in **Step1**.
@@ -153,9 +153,6 @@ For more info on using **Segment for iOS** refer to [**Developer Docs**](https:/
 
 ![Downlaod](https://api.bintray.com/packages/moengage/android-sdk/moengage-segment-integration/images/download.svg)
 
-
-To get up and running with MoEngage on Android, there a couple of steps we will walk you through.
-
 To enable its full functionality (like Push Notifications, InApp Messaging), there are still a couple of steps that you have to take care of in your Android app.
 
 #### Adding MoEngage Dependency:
@@ -169,8 +166,7 @@ Along with the segment, dependency add the below dependency in your build.gradle
 ```
 where `$sdkVersion` should be replaced by the latest version of the MoEngage SDK.
 
-MoEngage SDK depends on the below Jetpack libraries provided by Google for its functioning, make you add them if not
- done already.
+MoEngage SDK depends on the below Jetpack libraries provided by Google for its functioning, make sure you add them if it isn't already presnt in the application.
  
 ```groovy
     implementation("androidx.core:core:1.3.1")
@@ -204,7 +200,7 @@ Get APP ID from the Settings Page `Dashboard --> Settings --> App --> General` a
 ```java
 // this is the instance of the application class and "XXXXXXXXXXX" is the APP ID from the dashboard.
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXXX")
-            .enableSegmentIntegration()
+            .enablePartnerIntegration(IntegrationPartner.SEGMENT)
             .build();
 MoEngage.initialise(moEngage);
 ```
@@ -240,7 +236,7 @@ Use the `configureNotificationMetaData()` to pass on the configuration to the SD
 MoEngage moEngage =
         new MoEngage.Builder(this, "XXXXXXXXXX")
             .configureNotificationMetaData(new NotificationConfig(R.drawable.small_icon, R.drawable.large_icon, R.color.notiColor, "sound", true, true, true))
-            .enableSegmentIntegration()
+            .enablePartnerIntegration(IntegrationPartner.SEGMENT)
             .build();
 MoEngage.initialise(moEngage);
 ```
@@ -264,7 +260,7 @@ To opt-out of MoEngage's token registration mechanism disable token registration
 MoEngage moEngage = new MoEngage.Builder(this, "XXXXXXXXXX")
             .configureNotificationMetaData(new NotificationConfig(R.drawable.small_icon, R.drawable.large_icon, R.color.notiColor, "sound", true, true, true))
             .configureFcm(FcmConfig(false))
-            .enableSegmentIntegration()
+            .enablePartnerIntegration(IntegrationPartner.SEGMENT)
             .build();
 MoEngage.initialise(moEngage);
 ```
@@ -300,11 +296,9 @@ Add the below code in your manifest file.
  	</intent-filter>
 </service>
 ```
-When MoEngage SDK handles push registration it optionally provides a callback to the application whenever a new token is registered or token is refreshed. 
-Application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.Companion.getInstance().setEventListener()` 
-
-When MoEngage SDK handles push registration it optionally provides a callback to the Application whenever a new token is registered or token is refreshed.
-An application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.getInstance().addEventListener()`
+When MoEngage SDK handles push registration it optionally provides a callback to the Application whenever a new token is registered or token is refreshed. 
+An application can get this callback by implementing `FirebaseEventListener` and registering for a callback in the Application class' `onCreate()` using `MoEFireBaseHelper.getInstance().addEventListener()` 
+Refer to the [API reference](https://moengage.github.io/android-api-reference/moe-push-firebase/moe-push-firebase/com.moengage.firebase.listener/-firebase-event-listener/index.html) for more details  on the listener.
 
 ##### 4. Declaring & configuring Rich Landing Activity: 
 Add the following snippet and replace `[PARENT_ACTIVITY_NAME]` with the name of the parent 
@@ -333,6 +327,8 @@ You are now all set up to receive push notifications from MoEngage. For more inf
  * [API Reference](https://moengage.github.io/android-api-reference/-modules.html)
  
  * [Compliance](https://docs.moengage.com/docs/android-compliance)
+
+ * [Release Notes](https://docs.moengage.com/docs/segment-android-releases)
  
 
 #### Identify
